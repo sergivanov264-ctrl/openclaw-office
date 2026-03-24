@@ -61,7 +61,7 @@ export async function generateOfficeImage({
  * Generate image using Gemini Imagen API
  */
 async function generateWithGeminiImagen(prompt, apiKey) {
-  const url = `https://generativelanguage.googleapis.com/v1beta/models/imagen-3.0-generate-002:predict?key=${apiKey}`;
+  const url = `https://generativelanguage.googleapis.com/v1beta/models/imagen-4.0-generate-001:predict?key=${apiKey}`;
 
   const response = await fetch(url, {
     method: 'POST',
@@ -93,7 +93,7 @@ async function generateWithGeminiImagen(prompt, apiKey) {
  * Fallback: Generate image using Gemini generateContent with responseModalities
  */
 async function generateWithGeminiContent(prompt, apiKey) {
-  const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash-exp:generateContent?key=${apiKey}`;
+  const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-image:generateContent?key=${apiKey}`;
 
   const response = await fetch(url, {
     method: 'POST',
