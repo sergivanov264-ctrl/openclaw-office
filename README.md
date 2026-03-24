@@ -33,10 +33,10 @@ The dashboard runs on [http://localhost:4200](http://localhost:4200) by default.
 
 ### 2. Install the Notify plugin
 
-The [openclaw-kcc-notify](https://github.com/wickedapp/openclaw-kcc-notify) plugin bridges your OpenClaw gateway to the Office dashboard. **Without it, the dashboard won't receive any agent activity.**
+The [openclaw-office-notify-plugin](https://github.com/wickedapp/openclaw-office-notify-plugin) plugin bridges your OpenClaw gateway to the Office dashboard. **Without it, the dashboard won't receive any agent activity.**
 
 ```bash
-git clone https://github.com/wickedapp/openclaw-kcc-notify ~/.openclaw/extensions/kcc-notify
+git clone https://github.com/wickedapp/openclaw-office-notify-plugin ~/.openclaw/extensions/openclaw-office-notify
 ```
 
 Add to your `~/.openclaw/openclaw.json`:
@@ -44,12 +44,12 @@ Add to your `~/.openclaw/openclaw.json`:
 ```json
 {
   "plugins": {
-    "allow": ["kcc-notify"],
+    "allow": ["openclaw-office-notify"],
     "load": {
-      "paths": ["~/.openclaw/extensions/kcc-notify"]
+      "paths": ["~/.openclaw/extensions/openclaw-office-notify"]
     },
     "entries": {
-      "kcc-notify": {
+      "openclaw-office-notify": {
         "enabled": true
       }
     }
