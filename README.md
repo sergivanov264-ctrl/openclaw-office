@@ -126,22 +126,15 @@ This will:
 }
 ```
 
-### Finding Your Gateway Token
+### Gateway Token
 
-Your gateway token is in your OpenClaw config file:
+**If running on the same machine as OpenClaw** — the token is auto-detected from `~/.openclaw/openclaw.json`. No manual configuration needed.
+
+**If running on a different machine**, set the token in `openclaw-office.config.json` under `gateway.token`. You can find it with:
 
 ```bash
-# Option 1: Read it directly
-cat ~/.openclaw/openclaw.json | grep -A2 '"auth"' | grep '"token"'
-
-# Option 2: Use jq
 jq '.gateway.auth.token' ~/.openclaw/openclaw.json
-
-# Option 3: Check the OpenClaw dashboard URL
-# When you open http://127.0.0.1:18789 in a browser, the token is shown on the connect page
 ```
-
-Copy the token value into your `openclaw-office.config.json` under `gateway.token`.
 
 ### Environment Variables
 
