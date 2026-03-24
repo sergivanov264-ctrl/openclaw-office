@@ -17,23 +17,44 @@ It gives your AI agents a virtual office where you can watch them work in real-t
 
 ## Quick Start
 
-### 1. Install the Office dashboard
+### 1. Clone and install
 
 ```bash
 git clone https://github.com/wickedapp/openclaw-office
 cd openclaw-office
 npm install
-cp .env.example .env.local
-cp openclaw-office.config.example.json openclaw-office.config.json
+```
+
+### 2. Run the setup wizard (recommended)
+
+The interactive CLI wizard auto-detects your agents, generates a custom office scene, and configures everything:
+
+```bash
+node cli/index.js init
+```
+
+The wizard will:
+1. **Connect to your OpenClaw gateway** and auto-detect all your agents
+2. **Ask for your office style** — Cyberpunk, Minimalist, Cozy, Corporate, or Custom
+3. **Generate a custom office image** using Google Gemini (optional — works without it)
+4. **Auto-detect desk positions** using Claude Vision (optional)
+5. **Choose deployment method** — Docker, PM2, systemd, launchd, or manual
+6. **Write all config files** for you
+
+> For automated/CI setups: `node cli/index.js init --non-interactive`
+
+### 3. Build and start
+
+```bash
 npm run build
 npm start
 ```
 
 The dashboard runs on [http://localhost:4200](http://localhost:4200) by default.
 
-### 2. Install the Notify plugin
+### 4. Install the Notify plugin
 
-The [openclaw-office-notify-plugin](https://github.com/wickedapp/openclaw-office-notify-plugin) plugin bridges your OpenClaw gateway to the Office dashboard. **Without it, the dashboard won't receive any agent activity.**
+The [openclaw-office-notify-plugin](https://github.com/wickedapp/openclaw-office-notify-plugin) bridges your OpenClaw gateway to the Office dashboard. **Without it, the dashboard won't show real-time agent activity, task animations, or the request pipeline.**
 
 ```bash
 git clone https://github.com/wickedapp/openclaw-office-notify-plugin ~/.openclaw/extensions/openclaw-office-notify
@@ -63,26 +84,6 @@ openclaw gateway restart
 ```
 
 > **No OpenClaw gateway yet?** That's fine — the dashboard works in standalone mode. You'll see the full UI with empty data. Connect a gateway and install the plugin later to see live agent activity.
-
-### Interactive Setup (CLI Wizard)
-
-If you have an OpenClaw gateway running, the CLI wizard can auto-discover your agents:
-
-```bash
-node cli/index.js init
-```
-
-For automated/CI setups (skips interactive prompts):
-```bash
-node cli/index.js init --non-interactive
-```
-
-This will:
-1. Connect to your OpenClaw gateway
-2. Discover your agents
-3. Choose your office style
-4. Generate your custom office scene
-5. Start the dashboard
 
 ## Configuration
 
