@@ -38,7 +38,7 @@ export async function connectGateway(url, token, { timeoutMs = 10000 } = {}) {
             id: 'connect-1',
             method: 'connect',
             params: {
-              minProtocol: 3, maxProtocol: 3,
+              minProtocol: 4, maxProtocol: 4,
               client: { id: 'openclaw-control-ui', version: '1.0.0', platform: 'nodejs', mode: 'ui' },
               role: 'operator',
               scopes: ['operator.read'],

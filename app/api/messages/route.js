@@ -1,5 +1,5 @@
-import { readFile, writeFile } from 'fs/promises'
-import { join } from 'path'
+import { mkdir, readFile, writeFile } from 'fs/promises'
+import { dirname, join } from 'path'
 
 const DATA_FILE = join(process.cwd(), 'public', 'data', 'messages.json')
 
@@ -36,6 +36,7 @@ export async function POST(request) {
     data.messages = data.messages.slice(0, 50)
     data.lastUpdated = new Date().toISOString()
     
+    await mkdir(dirname(DATA_FILE), { recursive: true })
     await writeFile(DATA_FILE, JSON.stringify(data, null, 2))
     
     return Response.json({ success: true, message: newMessage })
