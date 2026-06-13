@@ -4,9 +4,17 @@ import { motion } from 'framer-motion'
 import { useState, useEffect } from 'react'
 import { getAgentStats, enrichAgent } from '../lib/agents'
 
-function AgentCard({ agent }) {
+function AgentCard({ agent, statsMap }) {
   const [currentThought, setCurrentThought] = useState(0)
-  const stats = getAgentStats(agent.id)
+  const live = statsMap?.[agent.id]
+  const stats = live
+    ? {
+        conversations: live.events ?? 0,
+        completed: live.tasks_completed ?? 0,
+        words: 0,
+        tokens: 0,
+      }
+    : getAgentStats(agent.id)
 
   useEffect(() => {
     const interval = setInterval(() => {
@@ -116,10 +124,24 @@ function AgentCard({ agent }) {
 
 export default function TeamDashboard() {
   const [agents, setAgents] = useState([])
+  const [statsMap, setStatsMap] = useState({})
   useEffect(() => {
     fetch('/api/config').then(r => r.json()).then(data => {
       setAgents((data.agents || []).map(enrichAgent))
     }).catch(() => {})
+  }, [])
+  useEffect(() => {
+    const load = () => fetch('/api/stats/agents')
+      .then(r => r.json())
+      .then(data => {
+        const map = {}
+        for (const a of (data.agents || [])) map[a.id] = a
+        setStatsMap(map)
+      })
+      .catch(() => {})
+    load()
+    const t = setInterval(load, 15000)
+    return () => clearInterval(t)
   }, [])
 
   return (
@@ -144,7 +166,7 @@ export default function TeamDashboard() {
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: index * 0.1 }}
           >
-            <AgentCard agent={agent} />
+            <AgentCard agent={agent} statsMap={statsMap} />
           </motion.div>
         ))}
       </div>
