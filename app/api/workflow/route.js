@@ -180,7 +180,7 @@ export async function POST(request) {
         req = findByTgMessageId(messageId)
         if (req) {
           adopted = true
-          updateRequest(req.id, { assignedTo: finalAgent, content: content || req.content, chainId })
+          updateRequest(req.id, { assignedTo: finalAgent, content: content || req.content, chainId, createdAt: Date.now() })
           if (content) {
             fixPlaceholderEvents(req.id, content)
             createEvent(req.id, 'received', 'wickedman', `📥 Request from ${from}: "${cleanText.slice(0, 60)}${cleanText.length > 60 ? '...' : ''}"`)
@@ -194,7 +194,7 @@ export async function POST(request) {
         if (placeholder && (placeholder.state === 'received' || placeholder.state === 'analyzing')) {
           req = placeholder
           adopted = true
-          updateRequest(placeholder.id, { assignedTo: finalAgent, content: content || placeholder.content, tgMessageId: messageId || null, chainId })
+          updateRequest(placeholder.id, { assignedTo: finalAgent, content: content || placeholder.content, tgMessageId: messageId || null, chainId, createdAt: Date.now() })
           if (content) {
             fixPlaceholderEvents(placeholder.id, content)
             createEvent(placeholder.id, 'received', 'wickedman', `📥 Request from Boss: "${cleanText.slice(0, 60)}${cleanText.length > 60 ? '...' : ''}"`)
