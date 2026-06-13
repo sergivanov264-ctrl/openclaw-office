@@ -152,7 +152,7 @@ export default function CostDashboard() {
   })
 
   // Also add agents that have no stats yet (show as 0)
-  for (const agent of agents) {
+  for (const agent of Object.values(agentMap)) {
     if (!leaderboard.find(l => l.id === agent.id)) {
       leaderboard.push({
         ...agent,
