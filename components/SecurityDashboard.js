@@ -4,42 +4,41 @@ import { motion } from 'framer-motion'
 import { useState, useEffect } from 'react'
 import { Shield, Scan, AlertTriangle, CheckCircle, XCircle, Activity } from 'lucide-react'
 
-const mockPorts = [
-  { port: 22, service: 'SSH', address: '*:22', status: 'safe' },
-  { port: 80, service: 'HTTP', address: '*:80', status: 'safe' },
-  { port: 443, service: 'HTTPS', address: '*:443', status: 'safe' },
-  { port: 3000, service: 'Node.js', address: '*:3000', status: 'safe' },
-  { port: 3306, service: 'MySQL', address: '*:3306', status: 'warning' },
-  { port: 5432, service: 'PostgreSQL', address: '*:5432', status: 'safe' },
-  { port: 6379, service: 'Redis', address: '*:6379', status: 'safe' },
-  { port: 8080, service: 'Alt HTTP', address: '*:8080', status: 'safe' },
-  { port: 27017, service: 'MongoDB', address: '*:27017', status: 'danger' },
-]
-
 export default function SecurityDashboard() {
   const [healthScore, setHealthScore] = useState(0)
   const [scanCount, setScanCount] = useState(0)
   const [threats, setThreats] = useState(0)
   const [blocked, setBlocked] = useState(0)
   const [isScanning, setIsScanning] = useState(false)
-  const [ports, setPorts] = useState(mockPorts)
+  const [ports, setPorts] = useState([])
+
+  const loadScan = async () => {
+    try {
+      const res = await fetch('/api/security/ports')
+      const data = await res.json()
+      if (data.ports) {
+        setPorts(data.ports)
+        setThreats(data.counts?.danger ?? 0)
+        setBlocked(data.counts?.warning ?? 0)
+        setHealthScore(data.healthScore ?? 0)
+      }
+    } catch {}
+  }
 
   useEffect(() => {
-    // Animate health score
-    const timer = setTimeout(() => setHealthScore(87), 500)
-    setScanCount(24)
-    setThreats(1)
-    setBlocked(3)
-    return () => clearTimeout(timer)
+    loadScan().then(() => setScanCount(1))
+    const t = setInterval(() => {
+      loadScan()
+      setScanCount(prev => prev + 1)
+    }, 30000)
+    return () => clearInterval(t)
   }, [])
 
-  const handleScan = () => {
+  const handleScan = async () => {
     setIsScanning(true)
-    // Simulate scan
-    setTimeout(() => {
-      setScanCount(prev => prev + 1)
-      setIsScanning(false)
-    }, 3000)
+    await loadScan()
+    setScanCount(prev => prev + 1)
+    setIsScanning(false)
   }
 
   const getHealthColor = (score) => {
