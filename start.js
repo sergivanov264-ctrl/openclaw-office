@@ -4,7 +4,7 @@ import { readFileSync, existsSync } from 'fs';
 import { execSync } from 'child_process';
 
 let port = 4200;
-let host = '0.0.0.0';
+let host = process.env.HOST || process.env.HOSTNAME || '127.0.0.1';
 
 // Read from config
 try {
@@ -17,7 +17,7 @@ try {
 // Env override still works
 if (process.env.PORT) port = process.env.PORT;
 
-console.log(`Starting OpenClaw Office on port ${port}...`);
+console.log(`Starting OpenClaw Office on ${host}:${port}...`);
 
 // If standalone build exists (Docker/production), use it directly
 const standalonePath = '.next/standalone/server.js';
